@@ -1,0 +1,259 @@
+:root {
+  --bg: #1c1b1a;
+  --surface: #242220;
+  --border: rgba(255, 225, 168, 0.16);
+  --accent: #e8a33d;
+  --accent-soft: rgba(232, 163, 61, 0.14);
+  --text: #b99f6f;
+  --text-muted: #9c968d;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--bg);
+  /* a soft amber glow falling from the top, like a darkroom safelight
+     overhead, plus a pool of shadow in the corner for depth */
+  background-image:
+    radial-gradient(ellipse 900px 460px at 50% -12%, rgba(232, 163, 61, 0.16), transparent 65%),
+    radial-gradient(circle at 85% 100%, rgba(0, 0, 0, 0.45), transparent 55%);
+  background-repeat: no-repeat;
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* faint film-grain texture over the whole page - fitting, since this
+   is a tool about photos. kept subtle so it reads as texture, not noise */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27180%27%20height%3D%27180%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.85%27%20numOctaves%3D%273%27%20stitchTiles%3D%27stitch%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%2523n%29%27%2F%3E%3C%2Fsvg%3E");
+  background-size: 180px 180px;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 64px 24px 48px;
+}
+
+.site-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.site-header h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 3rem);
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.subhead {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.dropzone {
+  position: relative;
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--surface);
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  overflow: hidden;
+}
+
+.dropzone:hover { border-color: rgba(242, 237, 228, 0.3); }
+
+.dropzone:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* dragover state - toggled from JS while a file is being dragged over */
+.dropzone.is-dragover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: scale(1.01);
+}
+
+.upload-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.dz-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.1rem;
+  margin: 0 0 4px;
+}
+
+.dz-sub {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.preview-image {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.change-hint {
+  position: absolute;
+  inset: auto 0 14px 0;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.dropzone.has-image:hover .change-hint { opacity: 1; }
+
+.results { margin-top: 40px; }
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.results-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.export-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.export-btn:hover { border-color: var(--accent); color: var(--accent); }
+.export-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 14px;
+}
+
+/* paint-chip card look, with a little punched hole up top */
+.chip {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border: none;
+  border-radius: 8px;
+  padding: 0 8px 14px;
+  cursor: pointer;
+  background: var(--chip-color);
+  color: var(--chip-text);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: translateY(16px) rotate(-2deg);
+  animation: chipIn 0.45s ease forwards;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chip:hover { transform: translateY(-4px) rotate(0deg); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45); }
+.chip:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+.chip::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.chip-label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.chip.is-copied { transform: scale(1.05); }
+
+@keyframes chipIn {
+  to { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+.status-msg {
+  min-height: 1.2em;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+
+.status-msg.is-error { color: #e08585; }
+
+.site-footer { margin-top: 56px; text-align: center; }
+.site-footer p { color: var(--text-muted); font-size: 0.8rem; }
+
+@media (max-width: 480px) {
+  .page { padding: 40px 16px 32px; }
+  .dropzone { padding: 36px 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip { animation: none; opacity: 1; transform: none; }
+  * { transition: none !important; }
+}

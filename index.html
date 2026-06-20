@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Palette Pull — Image Color Extractor</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+
+    <header class="site-header">
+      <span class="eyebrow">Color tool</span>
+      <h1>Palette Pull</h1>
+      <p class="subhead">Drop in a photo. Pull out the colors that make it.</p>
+    </header>
+
+    <main>
+      <section id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload an image">
+        <input type="file" id="fileInput" accept="image/*" hidden />
+
+        <div class="dropzone-content" id="dropzoneContent">
+          <svg class="upload-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 16V4M12 4L7 9M12 4l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 16v2.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="dz-title">Drag a photo here</p>
+          <p class="dz-sub">or click to browse — JPG, PNG, WEBP</p>
+        </div>
+
+        <img id="previewImage" class="preview-image" alt="" hidden />
+        <p class="change-hint">click to use a different photo</p>
+      </section>
+
+      <!-- canvas is never shown, just used to read pixel values -->
+      <canvas id="workCanvas" hidden></canvas>
+
+      <section id="results" class="results" hidden>
+        <div class="results-header">
+          <h2>Your palette</h2>
+          <button id="exportBtn" class="export-btn" type="button">Copy as CSS</button>
+        </div>
+        <div id="swatches" class="swatches"></div>
+      </section>
+
+      <p id="statusMsg" class="status-msg" aria-live="polite"></p>
+    </main>
+
+    <footer class="site-footer">
+      <p>HTML / CSS / JS, no libraries</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
