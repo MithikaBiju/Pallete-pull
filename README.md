@@ -28,6 +28,7 @@ Palette-Pull/
 ├── style.css
 ├── script.js
 └── README.md
+
 How It Works
 Upload an image through drag-and-drop or file selection.
 The image is rendered onto a hidden canvas.
